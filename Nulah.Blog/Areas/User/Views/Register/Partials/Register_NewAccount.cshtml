@@ -1,0 +1,6 @@
+﻿New Account
+<form action="~/Register" method="post">
+    @Html.AntiForgeryToken()
+    <input type="email" name="EmailAddress" placeholder="Email Address" />
+    <button type="submit">Register</button>
+</form>

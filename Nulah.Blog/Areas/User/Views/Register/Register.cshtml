@@ -1,0 +1,5 @@
+﻿@if(User.Identity.IsAuthenticated) {
+    @Html.Partial("Partials/Register_AlreadyLoggedIn");
+} else {
+    @Html.Partial("Partials/Register_NewAccount");
+}
