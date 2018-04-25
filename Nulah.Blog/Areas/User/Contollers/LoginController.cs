@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Nulah.Blog.Controllers;
 using Nulah.Blog.Filters;
 using Nulah.Blog.Models;
+using Nulah.Blog.Models.Public;
 using Nulah.LazyCommon.Core.MSSQL;
 using System;
 using System.Collections.Generic;
@@ -148,6 +149,10 @@ namespace Nulah.Blog.Areas.User.Contollers {
                 var sessionClaim = User.Claims.First(x => x.Type == "SessionId");
                 userController.Logout(sessionClaim.Value);
                 await HttpContext.SignOutAsync();
+
+                if(HttpContext.SignOutAsync().IsCompleted) {
+                    ViewData["User"] = new PublicUser();
+                }
             }
             return View();
         }

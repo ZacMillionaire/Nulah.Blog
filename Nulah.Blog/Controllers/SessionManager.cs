@@ -23,19 +23,23 @@ namespace Nulah.Blog.Controllers {
                     {"@LastSeen",DateTime.UtcNow }
                 })
                 .Result()
-                .First();
-            var publicUser = new PublicUser {
-                DisplayName = user["DisplayName"].Value as string,
-                UserId = (int)user["ExternalId"].Value,
-                InternalId = (Guid)user["InternalId"].Value,
-                isLoggedIn = true,
-                Details = new UserDetails {
-                    Description = user["Description"].Value as string,
-                    GitHubProfile = user["GitHubProfile"].Value as string
-                }
-            };
+                ?.FirstOrDefault();
+            if(user != null) {
+                var publicUser = new PublicUser {
+                    DisplayName = user["DisplayName"].Value as string,
+                    UserId = (int)user["ExternalId"].Value,
+                    InternalId = (Guid)user["InternalId"].Value,
+                    isLoggedIn = true,
+                    Details = new UserDetails {
+                        Description = user["Description"].Value as string,
+                        GitHubProfile = user["GitHubProfile"].Value as string
+                    }
+                };
 
-            return publicUser;
+                return publicUser;
+            } else {
+                return null;
+            }
         }
     }
 }
