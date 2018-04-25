@@ -1,0 +1,14 @@
+﻿<div>
+    <p>
+        You should have (or will shortly) received an email containing a one time password to be used below.
+    </p>
+    <p>
+        We don't like the idea of having your email sprayed everywhere, so you'll need to enter it again below.
+    </p>
+</div>
+<form method="post" action="~/Login/FromEmail">
+    @Html.AntiForgeryToken()
+    <input type="email" name="Email" placeholder="Email Address" />
+    <input type="password" name="Password" placeholder="One Time Password" />
+    <button type="submit">Login</button>
+</form>

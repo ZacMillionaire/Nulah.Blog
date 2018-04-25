@@ -1,0 +1,5 @@
+﻿<form method="post" action="~/Login">
+    @Html.AntiForgeryToken()
+    <input type="email" name="Email" placeholder="Email Address" />
+    <button type="submit">Login</button>
+</form>

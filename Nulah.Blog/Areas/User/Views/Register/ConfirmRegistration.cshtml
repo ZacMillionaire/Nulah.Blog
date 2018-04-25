@@ -1,0 +1,9 @@
+﻿@{
+    string token = (string)ViewData["Token"];
+}
+<form method="post" action="~/Register/Confirm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="EmailCode" value="@token" />
+    <input type="text" name="UniqueCode" placeholder="Registration Code" />
+    <button type="submit">Verify Email</button>
+</form>

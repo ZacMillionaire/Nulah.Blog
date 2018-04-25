@@ -1,0 +1,10 @@
+﻿@{
+    string ErrorReason = (string)ViewData["Reason"];
+}
+
+@if(ErrorReason == "BadPassword") {
+    <div>The one time password used either invalid, or already used.</div>
+    <div><a href="~/Login/FromEmail">Click here try again</a> or <a href="~/Login">Start from the beginning</a></div>
+} else {
+    <div>An unknown error occurred. @ErrorReason</div>
+}

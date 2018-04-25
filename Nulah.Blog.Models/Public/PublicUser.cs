@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -14,6 +15,8 @@ namespace Nulah.Blog.Models.Public {
         public string DisplayName { get; set; }
         public bool isLoggedIn { get; set; }
         public int UserId { get; set; }
+        [JsonIgnore]
         public Guid InternalId { get; set; }
+        public UserDetails Details { get; set; }
     }
 }

@@ -1,12 +1,18 @@
-﻿<div class="header--nav">
+﻿@{
+    PublicUser userDetails = (PublicUser)ViewData["User"];
+}
+<div class="header--nav">
     <div class="header--nav-item">
-        Moar.ws
+        <a href="~/">Moar.ws</a>
     </div>
     <div class="header--nav-item header--user-menu">
         <ul>
-            <li><a href="~/Register">Register</a></li>
-            <li><a href="~/Login">Login</a></li>
-            <li><a href="~/Logout">Logout</a></li>
+            @if(userDetails.isLoggedIn == false) {
+                <li><a href="~/Register">Register</a></li>
+                <li><a href="~/Login">Login</a></li>
+            } else {
+                <li><a href="~/Logout">Logout</a></li>
+            }
         </ul>
     </div>
 </div>

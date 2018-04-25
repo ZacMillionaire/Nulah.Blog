@@ -1,0 +1,10 @@
+﻿@{
+    string ErrorReason = (string)ViewData["Reason"];
+}
+
+@if(ErrorReason == "EmailExists") {
+    <div>Unable to use email address that already exists.</div>
+    <div><a href="~/Login">Click here to log in instead.</a></div>
+} else {
+    <div>An unknown error occurred.</div>
+}

@@ -13,6 +13,7 @@ using Nulah.LazyCommon.Core.MSSQL;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Nulah.Blog.Filters;
+using Nulah.Blog.Controllers;
 
 namespace Nulah.Blog {
     public class Startup {
@@ -37,9 +38,11 @@ namespace Nulah.Blog {
             }
 
             LazyMapper lm = new LazyMapper(settings.MSSQLConnectionString);
+            SessionManager sc = new SessionManager(settings, lm);
 
             Console.WriteLine("Able to connect to database.");
             services.AddScoped(_ => lm);
+            services.AddScoped(_ => sc);
 
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -47,15 +50,15 @@ namespace Nulah.Blog {
                    LoginPath = new PathString("/Login"),
                    LogoutPath = new PathString("/Logout"),
                    AccessDeniedPath = "/",
-                   ExpireTimeSpan = new TimeSpan(30, 0, 0, 0),
-                   SlidingExpiration = true
+                   //ExpireTimeSpan = new TimeSpan(30, 0, 0, 0),
+                   //SlidingExpiration = true
                });
 
             services.AddSingleton(settings);
 
             services.AddMvc()
                 .AddMvcOptions(options => {
-                    options.Filters.Add(new UserFilter(lm));
+                    options.Filters.Add(new UserFilter(lm, sc));
                 });
         }
 
@@ -73,6 +76,7 @@ namespace Nulah.Blog {
             // Specifically it's probably going to be the 500 ScreamingExceptions throws on an internal error.
             // See: https://andrewlock.net/re-execute-the-middleware-pipeline-with-the-statuscodepages-middleware-to-create-custom-error-pages/
             app.UseStatusCodePagesWithReExecute("/Error/{0}");
+            app.UseScreamingExceptions();
 
             app.UseAuthentication();
 

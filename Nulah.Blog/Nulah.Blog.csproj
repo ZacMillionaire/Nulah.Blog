@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Nulah.LazyCommon\Nulah.LazyCommon.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>
