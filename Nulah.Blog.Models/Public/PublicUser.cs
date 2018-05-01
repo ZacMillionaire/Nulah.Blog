@@ -10,6 +10,7 @@ namespace Nulah.Blog.Models.Public {
             DisplayName = "Unregistered User";
             isLoggedIn = false;
             UserId = 0;
+            Roles = new Guid[] { };
         }
 
         public string DisplayName { get; set; }
@@ -18,5 +19,6 @@ namespace Nulah.Blog.Models.Public {
         [JsonIgnore]
         public Guid InternalId { get; set; }
         public UserDetails Details { get; set; }
+        public Guid[] Roles { get; set; }
     }
 }

@@ -17,23 +17,41 @@ namespace Nulah.Blog.Controllers {
         }
 
         public PublicUser RefreshSession(string SessionId) {
-            var user = _lazySql.StoredProcedure("CheckSessionAndReturnUserData")
+            var userId = _lazySql.StoredProcedure("CheckSessionAndRefreshAndReturnUserId")
                 .WithParameters(new Dictionary<string, object> {
                     {"@SessionId", SessionId },
                     {"@LastSeen",DateTime.UtcNow }
                 })
                 .Result()
                 ?.FirstOrDefault();
-            if(user != null) {
+
+            if(userId != null) {
+
+                var userDetails = _lazySql.StoredProcedure("GetFullUserDetails")
+                    .WithParameters(new Dictionary<string, object> {
+                        {"@InternalId", userId["InternalId"].Value },
+                    })
+                    .Result()
+                    ?.FirstOrDefault();
+
+                var userRoles = _lazySql.StoredProcedure("GetAllRolesForUser")
+                    .WithParameters(new Dictionary<string, object> {
+                        {"@UserInternalId", userId["InternalId"].Value },
+                    })
+                    .Result()
+                    .Select(x => (Guid)x["RoleId"].Value)
+                    .ToArray();
+
                 var publicUser = new PublicUser {
-                    DisplayName = user["DisplayName"].Value as string,
-                    UserId = (int)user["ExternalId"].Value,
-                    InternalId = (Guid)user["InternalId"].Value,
+                    DisplayName = userDetails["DisplayName"].Value as string,
+                    UserId = (int)userDetails["ExternalId"].Value,
+                    InternalId = (Guid)userDetails["InternalId"].Value,
                     isLoggedIn = true,
                     Details = new UserDetails {
-                        Description = user["Description"].Value as string,
-                        GitHubProfile = user["GitHubProfile"].Value as string
-                    }
+                        Description = userDetails["Description"].Value as string,
+                        GitHubProfile = userDetails["GitHubProfile"].Value as string
+                    },
+                    Roles = userRoles
                 };
 
                 return publicUser;
