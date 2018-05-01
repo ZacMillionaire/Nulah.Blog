@@ -11,6 +11,10 @@
                 <li><a href="~/Register">Register</a></li>
                 <li><a href="~/Login">Login</a></li>
             } else {
+                @if(userDetails.CanViewAdminPanel() == true) {
+                    <li><a href="~/Admin">Admin</a></li>
+                }
+                <li><a href="~/Profile">Profile</a></li>
                 <li><a href="~/Logout">Logout</a></li>
             }
         </ul>

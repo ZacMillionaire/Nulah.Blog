@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nulah.Blog.Core.Email;
 using Nulah.Blog.Models;
+using Nulah.Blog.Models.Public;
 using Nulah.LazyCommon.Core.MSSQL;
 using Nulah.LazyCommon.Core.UserManagement;
 
@@ -231,6 +232,23 @@ namespace Nulah.Blog.Controllers {
                 .Commit();
 
 
+        }
+
+        public PublicRoleDetails[] GetUserRoles(Guid InternalUserId) {
+            var userRoles = _lazySql.StoredProcedure("GetExpandedAllRolesForUser")
+                .WithParameters(new Dictionary<string, object> {
+                    {"@UserInternalId",InternalUserId }
+                })
+                .Result()
+                ?.Select(x => new PublicRoleDetails {
+                    Description = x["Description"].Value as string,
+                    Id = (Guid)x["RoleId"].Value,
+                    Name = x["Name"].Value as string,
+                    Source = x["Source"].Value as string
+                })
+                .ToArray();
+
+            return userRoles;
         }
     }
 }

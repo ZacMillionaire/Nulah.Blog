@@ -1,0 +1,45 @@
+﻿@{
+    PublicUser user = (PublicUser)ViewData["User"];
+}
+
+@* 73A09B3E-67FF-4B4E-9502-5FF752CF0E9D - ManageRoles *@
+@if(user.HasRole("73A09B3E-67FF-4B4E-9502-5FF752CF0E9D")) {
+    <div>
+        <h2>Role Management</h2>
+        <ul>
+            @if(user.HasRole("4EC21063-8730-4B6D-BD4C-2FD6AC2A54BD")) {
+                <li><a href="~/Admin/Roles/New">New</a></li>
+            }
+            @if(user.HasRole("E1C56E75-92D8-422D-95B5-0BDAEEBFEC2F")) {
+                <li><a href="~/Admin/Roles/Edit">Edit</a></li>
+            }
+            @if(user.HasRole("B09AD71A-AFC8-44C5-BF08-7327CDABDFA7")) {
+                <li><a href="~/Admin/Roles/Delete">Delete</a></li>
+            }
+            @if(user.HasRole("20AC1AC9-832A-4D11-8BD7-875CEEC086CE")) {
+                <li><a href="~/Admin/Roles/Remove">Remove (from user)</a></li>
+            }
+            @if(user.HasRole("D376588A-73FE-4B4A-9435-27E8F9D5092D")) {
+                <li><a href="~/Admin/Roles/Assign">Assign (to user)</a></li>
+            }
+        </ul>
+    </div>
+}
+
+@* F6112615-012F-4A10-B290-8F226195C863 - ManageRoleGroups*@
+@if(user.HasRole("F6112615-012F-4A10-B290-8F226195C863")) {
+    <div>
+        <h2>Role Group Management</h2>
+        <ul>
+            @if(user.HasRole("681FC831-DF5E-42C2-B72B-057D0EDDB333")) {
+                <li><a href="~/Admin/RoleGroups/New">New</a></li>
+            }
+            @if(user.HasRole("E030A4E5-50AD-4923-B876-CAF84BA24E0E")) {
+                <li><a href="~/Admin/RoleGroups/Edit">Edit</a></li>
+            }
+            @if(user.HasRole("0F6ADECA-8E42-405D-BA92-D9311C5CDC00")) {
+                <li><a href="~/Admin/RoleGroups/Delete">Delete</a></li>
+            }
+        </ul>
+    </div>
+}

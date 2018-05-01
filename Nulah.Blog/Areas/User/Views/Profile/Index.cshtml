@@ -1,0 +1,22 @@
+﻿@{
+    PublicUser user = (PublicUser)ViewData["User"];
+    PublicRoleDetails[] roles = (PublicRoleDetails[])ViewData["UserRoles"];
+}
+
+<div>
+    <h2>Howdy, @user.DisplayName</h2>
+</div>
+<div>
+    <p>You're currently a @user.Details.RoleGroupName</p>
+</div>
+<div>
+    <p>You have the following permissions</p>
+    <table>
+        @foreach(var role in roles) {
+            <tr>
+                <td>@role.Name</td>
+                <td>@role.Description</td>
+            </tr>
+        }
+    </table>
+</div>

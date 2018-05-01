@@ -30,7 +30,7 @@ namespace Nulah.Blog.Filters {
             if(context.HttpContext.User.Identity.IsAuthenticated) {
                 var user = context.HttpContext.User;
                 var sessionClaim = user.Claims.First(x => x.Type == "SessionId");
-                var sessionUserData = _sessionController.RefreshSession(sessionClaim.Value);
+                var sessionUserData = _sessionController.ValidateAndGetUserDataFromSession(sessionClaim.Value);
                 if(sessionUserData != null) {
                     UserData = sessionUserData;
                 }

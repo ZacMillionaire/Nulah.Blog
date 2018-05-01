@@ -16,7 +16,7 @@ namespace Nulah.Blog.Controllers {
             _lazySql = lazySql;
         }
 
-        public PublicUser RefreshSession(string SessionId) {
+        public PublicUser ValidateAndGetUserDataFromSession(string SessionId) {
             var userId = _lazySql.StoredProcedure("CheckSessionAndRefreshAndReturnUserId")
                 .WithParameters(new Dictionary<string, object> {
                     {"@SessionId", SessionId },
@@ -49,7 +49,9 @@ namespace Nulah.Blog.Controllers {
                     isLoggedIn = true,
                     Details = new UserDetails {
                         Description = userDetails["Description"].Value as string,
-                        GitHubProfile = userDetails["GitHubProfile"].Value as string
+                        GitHubProfile = userDetails["GitHubProfile"].Value as string,
+                        RoleGroupName = userDetails["RoleGroupName"].Value as string,
+                        RoleGroupId = (Guid)userDetails["RoleGroupId"].Value,
                     },
                     Roles = userRoles
                 };
