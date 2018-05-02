@@ -1,0 +1,35 @@
+﻿@{
+    PublicRoleDetails[] availableRoles = (PublicRoleDetails[])ViewData["Roles"];
+}
+
+New Role Group
+<form action="~/Admin/RoleGroups/New" method="post">
+    @Html.AntiForgeryToken()
+    <div>
+        <label for="Name">Name:</label>
+        <input name="Name" id="Name" placeholder="Role Group Name" type="text" required />
+    </div>
+    <div>
+        <label for="Description">Description:</label>
+        <input name="Description" id="Description" placeholder="Role Group Name" type="text" required />
+    </div>
+    <div>
+        <table>
+            <tr>
+                <td></td>
+                <td>Name</td>
+                <td>Description</td>
+            </tr>
+            @foreach(var role in availableRoles) {
+                <tr>
+                    <td><input type="checkbox" name="Roles" value="@role.Id" id="@role.Name" /></td>
+                    <td><label for="@role.Name">@role.Name</label></td>
+                    <td>@role.Description</td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div>
+        <button type="submit">Create Role</button>
+    </div>
+</form>

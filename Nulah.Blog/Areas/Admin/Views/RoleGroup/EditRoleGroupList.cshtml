@@ -1,0 +1,23 @@
+﻿@{
+    List<PublicRoleGroup> roleGroups = (List<PublicRoleGroup>)ViewData["RoleGroups"];
+}
+<table>
+    <tr>
+        <th>
+            Name
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Users
+        </th>
+    </tr>
+    @foreach(var roleGroup in roleGroups) {
+        <tr>
+            <td><a href="~/Admin/RoleGroups/Edit/@roleGroup.Id">@roleGroup.Name</a></td>
+            <td>@roleGroup.Description</td>
+            <td>@roleGroup.MemberCount</td>
+        </tr>
+    }
+</table>

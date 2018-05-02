@@ -20,6 +20,7 @@ namespace Nulah.Blog.Models {
 
         public string SendGridApiKey { get; set; }
         public string DomainBaseUrl { get; set; }
+        public Guid AdministratorRoleGroupId { get; set; }
 
         protected string _mssqlConnectionString;
     }

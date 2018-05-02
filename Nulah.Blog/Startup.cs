@@ -28,7 +28,8 @@ namespace Nulah.Blog {
             var settings = new AppSettings() {
                 MSSQLConnectionString = Configuration.GetSection("MSSQL:ConnectionString").Get<string>(), // TODO: make app settings binding here instead of this
                 SendGridApiKey = Configuration.GetSection("ApiKeys:SendGrid").Get<string>(),
-                DomainBaseUrl = Configuration.GetSection("DomainBaseUrl").Get<string>()
+                DomainBaseUrl = Configuration.GetSection("DomainBaseUrl").Get<string>(),
+                AdministratorRoleGroupId = Configuration.GetSection("RoleGroups:Administrator").Get<Guid>()
             };
 
             Console.WriteLine("Testing Connection string...");
