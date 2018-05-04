@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Nulah.Blog.Controllers;
+using Nulah.Blog.Filters;
 using Nulah.Blog.Models;
 using Nulah.LazyCommon.Core.MSSQL;
 
@@ -12,6 +13,7 @@ using Nulah.LazyCommon.Core.MSSQL;
 
 namespace Nulah.Blog.Areas.Admin.Controllers {
     [Area("Admin")]
+    [RoleFilter("7A52EF09-D1B2-409B-9D9E-55D73A769B1F")]
     public class RoleGroupController : Controller {
         private readonly AppSettings _appSettings;
         private readonly LazyMapper _lazySql;
@@ -93,6 +95,24 @@ namespace Nulah.Blog.Areas.Admin.Controllers {
             string deleteRolesQuerySP;
             string deleteRoleQuery;
 
+            if(removedRoles.Count() > 0) {
+                deleteRolesQuerySP = @"DECLARE @DeleteQuery NVARCHAR(MAX); 
+DECLARE @DeleteParamDef NVARCHAR(MAX);
+SET @DeleteQuery = N'DELETE FROM [dbo].[RoleGroup_Roles] WHERE [RoleGroupId] = @RoleGroupId AND [RoleId] = @RoleId'
+SET @DeleteParamDef = N'@RoleGroupId UNIQUEIDENTIFIER, @RoleId UNIQUEIDENTIFIER'";
+
+                var sb = new StringBuilder();
+
+                foreach(var removedRole in removedRoles) {
+                    sb.AppendLine($"EXECUTE sp_executesql @DeleteQuery, @DeleteParamDef, @RoleGroupId = N'{RoleGroupGuid}',@RoleId = N'{removedRole}'{Environment.NewLine}");
+                }
+
+                deleteRoleQuery = deleteRolesQuerySP + sb.ToString();
+
+                _lazySql.Query(deleteRoleQuery)
+                 .Commit();
+            }
+
             if(addedRoles.Count() > 0) {
                 var valueList = new List<string>();
 
@@ -104,23 +124,13 @@ namespace Nulah.Blog.Areas.Admin.Controllers {
                        ([RoleGroupId]
                        ,[RoleId])
                  VALUES {string.Join(",", valueList)}";
+
+                _lazySql.Query(insertRolesQuery)
+                    .Commit();
             }
 
-            if(removedRoles.Count() > 0) {
 
-                deleteRolesQuerySP = $"SET @DeleteQuery = N'DELETE FROM [dbo].[RoleGroup_Roles] WHERE [RoleGroupId] = @RoleGroupId AND [RoleId] = @RoleId'{Environment.NewLine}" +
-                    "SET @DeleteParamDef = N'@RoleGroupId UNIQUEIDENTIFIER, @RoleId UNIQUEIDENTIFIER'";
-
-                var sb = new StringBuilder();
-
-                foreach(var removedRole in removedRoles) {
-                    sb.AppendLine($"EXECUTE sp_executesql @DeleteQuery, @DeleteParamDef, @RoleGroupId = N'{RoleGroupGuid}',@RoleId = N'{removedRole}'");
-                }
-
-                deleteRoleQuery = sb.ToString();
-            }
-
-            return View();
+            return RedirectToAction("EditRoleGroupForm", new Dictionary<string, object> { { "RoleGroupGuid", RoleGroupGuid } });
         }
     }
 

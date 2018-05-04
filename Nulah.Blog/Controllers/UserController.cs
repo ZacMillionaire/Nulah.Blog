@@ -107,7 +107,8 @@ namespace Nulah.Blog.Controllers {
                 _lazySql.StoredProcedure("CreateBlankProfile")
                     .WithParameters(new Dictionary<string, object> {
                         { "@EmailAddress",emailAddress },
-                        { "@InternalId", Guid.NewGuid() }
+                        { "@InternalId", Guid.NewGuid() },
+                        { "@UserGroupId", _appSettings.DefaultUserRoleGroupId }
                     })
                     .Commit();
 

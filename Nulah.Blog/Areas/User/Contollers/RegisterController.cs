@@ -65,7 +65,7 @@ namespace Nulah.Blog.Areas.User.Contollers {
         public IActionResult ConfirmRegistration(string t) {
 
             if(string.IsNullOrWhiteSpace(t)) {
-                Response.Redirect("/Register");
+                return RedirectToAction("Register");
             }
 
             ViewData.Add("Token", t);
@@ -76,9 +76,14 @@ namespace Nulah.Blog.Areas.User.Contollers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("~/Register/Confirm")]
-        public void FinishRegistration([FromForm]VerifyEmailFormData formData) {
+        public IActionResult FinishRegistration([FromForm]VerifyEmailFormData formData) {
             UserController userController = new UserController(_appSettings, _lazySql);
-            userController.CompleteUserRegistration(formData.EmailCode, formData.UniqueCode);
+            var registered = userController.CompleteUserRegistration(formData.EmailCode, formData.UniqueCode);
+            if(registered) {
+                return View("RegistrationSuccess");
+            } else {
+                return RedirectToAction("RegistrationError", new Dictionary<string, object> { { "Reason", "RegistrationFailed" } });
+            }
         }
 
     }
